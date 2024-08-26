@@ -2,5 +2,8 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
+  devServer: {
+    port: 3000,
+  },
   modules: ["@nuxtjs/tailwindcss"]
 })
