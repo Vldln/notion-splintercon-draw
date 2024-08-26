@@ -17,6 +17,9 @@ importers:
       axios:
         specifier: ^1.7.3
         version: 1.7.3
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       nuxt:
         specifier: ^3.12.4
         version: 3.12.4(@parcel/watcher@2.4.1)(@types/node@22.2.0)(ioredis@5.4.1)(magicast@0.3.4)(rollup@4.20.0)(terser@5.31.6)(vite@5.4.0(@types/node@22.2.0)(terser@5.31.6))

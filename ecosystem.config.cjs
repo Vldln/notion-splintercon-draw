@@ -1,3 +1,4 @@
+require("dotenv").config();
 module.exports = {
   apps: [
     {
@@ -9,6 +10,8 @@ module.exports = {
       env_file: "./.env",
       env: {
         NODE_ENV: "production",
+        VUE_APP_NOTION_API_KEY: process.env.VUE_APP_NOTION_API_KEY,
+        VUE_APP_NOTION_DATABASE_ID: process.env.VUE_APP_NOTION_DATABASE_ID,
       },
       watch: true,
       watch_delay: 1000,
