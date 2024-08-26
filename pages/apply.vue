@@ -144,6 +144,8 @@ const successShow = ref(null);
 const errorShow = ref(null);
 const canvasWidth = ref(null);
 const canvasHeight = ref(null);
+const config = useRuntimeConfig();
+const domain = config.public.domain;
 
 onMounted(() => {
   canvasWidth.value = window.innerWidth * 0.8;
@@ -177,7 +179,7 @@ const submitForm = async () => {
 
     if (response.ok) {
       const data = await response.json();
-      form.value.draw = "http://localhost:3000/uploads/" + data.fileName;
+      form.value.draw = `${domain}/uploads/` + data.fileName;
     } else {
       console.error("Failed to upload image", response.statusText);
     }

@@ -5,5 +5,11 @@ export default defineNuxtConfig({
   devServer: {
     port: 3000,
   },
-  modules: ["@nuxtjs/tailwindcss"]
+  modules: ["@nuxtjs/tailwindcss"],
+  runtimeConfig: {
+    public: {
+      domain: process.env.DOMAIN || 'http://localhost:3000',
+    }
+  }
+
 })

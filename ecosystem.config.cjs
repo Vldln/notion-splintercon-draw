@@ -12,6 +12,7 @@ module.exports = {
         NODE_ENV: "production",
         VUE_APP_NOTION_API_KEY: process.env.VUE_APP_NOTION_API_KEY,
         VUE_APP_NOTION_DATABASE_ID: process.env.VUE_APP_NOTION_DATABASE_ID,
+        DOMAIN: process.env.DOMAIN,
       },
       watch: true,
       watch_delay: 1000,
