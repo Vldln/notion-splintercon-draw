@@ -9,6 +9,9 @@ module.exports = {
       env: {
         NODE_ENV: "production",
       },
+      watch: true,
+      watch_delay: 1000,
+      ignore_watch: ["node_modules", "logs"],
     },
   ],
 };
