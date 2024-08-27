@@ -47,9 +47,8 @@ const addDataToCoda = async (data) => {
             },
             {
               column: "Select", // replace with your actual column ID or name
-              value: "Pending",
+              value: null,
             },
-
             {
               column: "Draw", // replace with your actual column ID or name
               value: data.draw,

@@ -89,7 +89,7 @@
               type="checkbox"
               class="mr-2"
             />
-            <label for="subscribe"
+            <label for="subscribe" class="text-lg"
               >Do you wish to sign up to SplinterCon newsletter, get updates
               about the upcoming offline and online events, tool demos and
               more?</label
@@ -103,13 +103,14 @@
               required
               class="mr-2"
             />
-            <label for="hatespeech"
+            <label for="hatespeech" class="text-lg"
               >I confirm that the draw does not content hatespeech, does not
               violate human rights etc</label
             >
           </div>
           <button
-            class="text-xl bg-[#3a0fc8] rounded-lg text-white px-8 py-3 font-bold hover:bg-gray-200"
+            :disabled="!form.hatespeech || !form.subscribe"
+            class="text-xl bg-[#3a0fc8] rounded-lg text-white px-8 py-3 font-bold hover:bg-gray-200 disabled:bg-gray-300"
             type="submit"
             @click="submitForm"
           >
@@ -153,10 +154,22 @@ onMounted(() => {
 });
 
 const nextStep = () => {
+  if (step.value === 2 && !validateEmail(form.value.email)) {
+    errorShow.value = "Please enter a valid email address.";
+    return;
+  }
+
   step.value++;
+  errorShow.value = null;
 };
+
 const prevStep = () => {
   step.value--;
+};
+
+const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
 };
 
 const submitForm = async () => {
@@ -166,7 +179,8 @@ const submitForm = async () => {
       .toDataURL("image/png");
 
     if (!canvasImage) {
-      throw new Error("Canvas element not found");
+      errorShow.value = "Canvas element not found";
+      return;
     }
 
     const response = await fetch("/api/upload", {
