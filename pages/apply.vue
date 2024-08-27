@@ -190,8 +190,6 @@ const submitForm = async () => {
       body: JSON.stringify({ canvasImage }),
     });
 
-    console.log(response);
-
     if (response.ok) {
       const data = await response.json();
       form.value.draw = `${domain}/uploads/` + data.fileName;
