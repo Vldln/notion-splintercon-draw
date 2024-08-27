@@ -1,5 +1,8 @@
-import { Client } from "@notionhq/client";
-const notion = new Client({ auth: process.env.VUE_APP_NOTION_API_KEY });
+import axios from "axios";
+
+const codaApiKey = process.env.VUE_APP_CODA_API_KEY;
+const codaDocId = process.env.VUE_APP_CODA_DOC_ID;
+const codaTableId = process.env.VUE_APP_CODA_TABLE_ID;
 
 export default defineEventHandler(async (event) => {
   try {
@@ -13,7 +16,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    await addDataToNotion({
+    await addDataToCoda({
       name,
       email,
       draw,
@@ -31,59 +34,69 @@ export default defineEventHandler(async (event) => {
   }
 });
 
-const addDataToNotion = async (data) => {
-  const response = await notion.pages.create({
-    parent: { database_id: process.env.VUE_APP_NOTION_DATABASE_ID },
-    properties: {
-      Name: {
-        title: [
-          {
-            text: {
-              content: data.name,
+const addDataToCoda = async (data) => {
+  const response = await axios.post(
+    `https://coda.io/apis/v1/docs/${codaDocId}/tables/${codaTableId}/rows`,
+    {
+      rows: [
+        {
+          cells: [
+            {
+              column: "Name", // replace with your actual column ID or name
+              value: data.name,
             },
-          },
-        ],
-      },
-      Email: {
-        email: data.email,
-      },
-      Draw: {
-        files: [
-          {
-            name: `Draw_${Date.now()}.png`, // имя файла
-            external: {
-              url: data.draw,
+            {
+              column: "Select", // replace with your actual column ID or name
+              value: "Pending",
             },
-          },
-        ],
-      },
-      Subscribe: {
-        checkbox: data.subscribe,
-      },
-      Hatespeech: {
-        checkbox: data.hatespeech,
-      },
-      Select: {
-        select: {
-          name: "Pending",
-        },
-      },
-    },
-  });
 
-  return response;
+            {
+              column: "Draw", // replace with your actual column ID or name
+              value: data.draw,
+            },
+            {
+              column: "Email", // replace with your actual column ID or name
+              value: data.email,
+            },
+            {
+              column: "Subscribe", // replace with your actual column ID or name
+              value: data.subscribe,
+            },
+            {
+              column: "Hatespeech", // replace with your actual column ID or name
+              value: data.hatespeech,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${codaApiKey}`,
+      },
+    }
+  );
+
+  return response.data;
 };
 
-export const getNotionData = async () => {
-  const response = await notion.databases.query({
-    database_id: process.env.NOTION_DATABASE_ID,
-  });
+export const getCodaData = async () => {
+  const response = await axios.get(
+    `https://coda.io/apis/v1/docs/${codaDocId}/tables/${codaTableId}/rows`,
+    {
+      headers: {
+        Authorization: `Bearer ${codaApiKey}`,
+      },
+    }
+  );
 
-  return response.results.map((page) => ({
-    name: page.properties.Name.title[0]?.text?.content,
-    imageUrl: page.properties.Draw.files[0]?.external?.url || "",
-    email: page.properties.Email.email,
-    subscribe: page.properties.Subscribe.checkbox,
-    hatespeech: page.properties.Hatespeech.checkbox,
+  return response.data.items.map((item) => ({
+    name: item.values.find((cell) => cell.column === "Name")?.value || "",
+    imageUrl: item.values.find((cell) => cell.column === "Draw")?.value || "",
+    email: item.values.find((cell) => cell.column === "Email")?.value || "",
+    subscribe:
+      item.values.find((cell) => cell.column === "Subscribe")?.value || false,
+    hatespeech:
+      item.values.find((cell) => cell.column === "Hatespeech")?.value || false,
   }));
 };

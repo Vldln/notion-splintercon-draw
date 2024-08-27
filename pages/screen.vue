@@ -16,15 +16,12 @@
           <div
             class="flex flex-col items-center justify-center h-full w-[600px] mx-auto"
             v-if="
-              item?.properties?.Select?.select?.name === 'Publish' &&
-              item?.properties?.Story?.rich_text[0]?.plain_text
+              item.values['c-RlABQnn7y9'] === 'Publish' &&
+              item.values['c-olL0qgSAiX']
             "
           >
             <img src="/cropped-sign-all-17.png" class="w-10 pb-10" alt="" />
-            <img
-              :src="page.properties.Draw.files[0]?.external?.url || ''"
-              alt=""
-            />
+            <img :src="item.values['c-HEc4oqrCHC'] || ''" alt="" />
           </div>
         </div>
       </div>
@@ -67,7 +64,7 @@ async function fetchData() {
   try {
     const response = await axios.get("/api/database");
     data.value = response.data.filter(
-      (item) => item.properties.Select?.select?.name === "Publish"
+      (item) => item.values["c-RlABQnn7y9"] === "Publish"
     );
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -79,7 +76,7 @@ function startSlideShow() {
     if (data.value.length > 0) {
       currentIndex.value = (currentIndex.value + 1) % data.value.length;
     }
-  }, 15000); // Change slide every 10 seconds
+  }, 15000); // Change slide every 15 seconds
 }
 
 onMounted(() => {

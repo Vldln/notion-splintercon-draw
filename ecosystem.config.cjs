@@ -10,8 +10,9 @@ module.exports = {
       env_file: "./.env",
       env: {
         NODE_ENV: "production",
-        VUE_APP_NOTION_API_KEY: process.env.VUE_APP_NOTION_API_KEY,
-        VUE_APP_NOTION_DATABASE_ID: process.env.VUE_APP_NOTION_DATABASE_ID,
+        VUE_APP_CODA_API_KEY: process.env.VUE_APP_CODA_API_KEY,
+        VUE_APP_CODA_DOC_ID: process.env.VUE_APP_CODA_DOC_ID,
+        VUE_APP_CODA_TABLE_ID: process.env.VUE_APP_CODA_TABLE_ID,
         DOMAIN: process.env.DOMAIN,
       },
       watch: true,

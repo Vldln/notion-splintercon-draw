@@ -1,13 +1,19 @@
-import { Client } from "@notionhq/client";
+import axios from "axios";
 
-const notion = new Client({ auth: process.env.VUE_APP_NOTION_API_KEY });
-const image_database_id = process.env.VUE_APP_NOTION_DATABASE_ID;
+const codaApiKey = process.env.VUE_APP_CODA_API_KEY;
+const codaDocId = process.env.VUE_APP_CODA_DOC_ID;
+const codaTableId = process.env.VUE_APP_CODA_TABLE_ID;
 
 async function getData() {
-  const data = await notion.databases.query({
-    database_id: image_database_id,
-  });
-  return data.results;
+  const response = await axios.get(
+    `https://coda.io/apis/v1/docs/${codaDocId}/tables/${codaTableId}/rows`,
+    {
+      headers: {
+        Authorization: `Bearer ${codaApiKey}`,
+      },
+    }
+  );
+  return response.data.items;
 }
 
 export default defineEventHandler(async () => {
@@ -15,10 +21,10 @@ export default defineEventHandler(async () => {
     const data = await getData();
     return data;
   } catch (error) {
-    console.error("Error fetching data from Notion:", error);
+    console.error("Error fetching data from Coda:", error);
     throw createError({
       statusCode: 500,
-      statusMessage: "Failed to fetch data from Notion",
+      statusMessage: "Failed to fetch data from Coda",
     });
   }
 });
