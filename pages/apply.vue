@@ -89,7 +89,7 @@
               type="checkbox"
               class="mr-2"
             />
-            <label for="subscribe" class="text-lg"
+            <label for="subscribe"
               >Do you wish to sign up to SplinterCon newsletter, get updates
               about the upcoming offline and online events, tool demos and
               more?</label
@@ -103,15 +103,14 @@
               required
               class="mr-2"
             />
-            <label for="hatespeech" class="text-lg"
+            <label for="hatespeech"
               >I confirm that the draw does not content hatespeech, does not
               violate human rights etc</label
             >
           </div>
           <button
-            :disabled="!form.hatespeech || !form.subscribe"
-            class="text-xl bg-[#3a0fc8] rounded-lg text-white px-8 py-3 font-bold hover:bg-gray-200 disabled:bg-gray-300"
-            type="submit"
+            class="text-xl bg-[#3a0fc8] rounded-lg text-white px-8 py-3 font-bold hover:bg-gray-200"
+            type="button"
             @click="submitForm"
           >
             Submit
@@ -129,7 +128,7 @@
   </div>
 </template>
   
-  <script setup>
+<script setup>
 import { ref } from "vue";
 import axios from "axios";
 import VueDrawingCanvas from "vue-drawing-canvas";
@@ -153,6 +152,11 @@ onMounted(() => {
   canvasHeight.value = window.innerHeight * 0.6;
 });
 
+const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+};
+
 const nextStep = () => {
   if (step.value === 2 && !validateEmail(form.value.email)) {
     errorShow.value = "Please enter a valid email address.";
@@ -165,11 +169,6 @@ const nextStep = () => {
 
 const prevStep = () => {
   step.value--;
-};
-
-const validateEmail = (email) => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
 };
 
 const submitForm = async () => {
@@ -191,11 +190,15 @@ const submitForm = async () => {
       body: JSON.stringify({ canvasImage }),
     });
 
+    console.log(response);
+
     if (response.ok) {
       const data = await response.json();
       form.value.draw = `${domain}/uploads/` + data.fileName;
     } else {
       console.error("Failed to upload image", response.statusText);
+      errorShow.value = "Failed to upload image";
+      return;
     }
 
     await axios.post("/api/database", form.value);
@@ -222,4 +225,3 @@ const submitForm = async () => {
   }
 };
 </script>
-  
