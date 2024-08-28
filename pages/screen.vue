@@ -15,18 +15,24 @@
         >
           <div
             class="flex flex-col items-center justify-center h-full w-[600px] mx-auto"
-            v-if="
-              item.values['c-RlABQnn7y9'] === 'Publish' &&
-              item.values['c-olL0qgSAiX']
-            "
           >
             <img src="/cropped-sign-all-17.png" class="w-10 pb-10" alt="" />
-            <img :src="item.values['c-HEc4oqrCHC'] || ''" alt="" />
+            <img
+              :src="item.values['c-HEc4oqrCHC'][0].url || ''"
+              alt=""
+              class="mx-auto w-full"
+            />
+            <div class="font-bold">
+              {{ item.values["c-olL0qgSAiX"].replace(/`/g, "") }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="flex flex-col items-center justify-center h-screen relative">
+    <div
+      v-else
+      class="flex flex-col items-center justify-center h-screen relative"
+    >
       <div class="absolute max-w-[500px] flex flex-col">
         <img src="/cropped-sign-all-17.png" class="w-20" alt="" />
         <h1 class="text-3xl font-black mt-4 mb-4">Draw Me a Splinternet</h1>
@@ -64,7 +70,7 @@ async function fetchData() {
   try {
     const response = await axios.get("/api/database");
     data.value = response.data.filter(
-      (item) => item.values["c-RlABQnn7y9"] === "Publish"
+      (item) => item.values["c-RlABQnn7y9"] == "```Publish```"
     );
   } catch (error) {
     console.error("Error fetching data:", error);

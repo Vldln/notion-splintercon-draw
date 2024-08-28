@@ -6,7 +6,7 @@ const codaTableId = process.env.VUE_APP_CODA_TABLE_ID;
 
 async function getData() {
   const response = await axios.get(
-    `https://coda.io/apis/v1/docs/${codaDocId}/tables/${codaTableId}/rows`,
+    `https://coda.io/apis/v1/docs/${codaDocId}/tables/${codaTableId}/rows?valueFormat=rich`,
     {
       headers: {
         Authorization: `Bearer ${codaApiKey}`,
