@@ -22,7 +22,7 @@
               alt=""
               class="mx-auto w-full"
             />
-            <div class="font-bold">
+            <div class="font-bold mt-4">
               {{ item.values["c-olL0qgSAiX"].replace(/`/g, "") }}
             </div>
           </div>
@@ -65,6 +65,7 @@ import axios from "axios";
 
 const data = ref([]);
 const currentIndex = ref(0);
+const intervalId = ref(null);
 
 async function fetchData() {
   try {
@@ -85,9 +86,14 @@ function startSlideShow() {
   }, 15000); // Change slide every 15 seconds
 }
 
+function startAutoRefresh() {
+  intervalId.value = setInterval(fetchData, 10000); // Fetch data every 10 seconds
+}
+
 onMounted(() => {
   fetchData();
   startSlideShow();
+  startAutoRefresh();
 });
 
 onUnmounted(() => {
